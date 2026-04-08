@@ -1,7 +1,9 @@
+# bot/__init__.py
+
 import logging
 import asyncio
-from megasdkrestclient import AsyncMegaSdkRestClient
 from aiohttp import ClientSession
+from megasdkrestclient import AsyncMegaSdkRestClient
 
 LOGGER = logging.getLogger(__name__)
 
@@ -12,12 +14,18 @@ bot_loop = asyncio.get_event_loop()
 mega_client = None
 
 async def init_clients():
+    """
+    Initialize MegaSDK async client inside the event loop.
+    """
     global mega_client
-    session = ClientSession()
+    session = ClientSession()  # create session inside the running loop
     mega_client = AsyncMegaSdkRestClient("http://localhost:6090", session=session)
     LOGGER.info("MegaSDK async client initialized.")
 
 async def close_clients():
+    """
+    Cleanly close MegaSDK client on shutdown.
+    """
     global mega_client
     if mega_client:
         try:
