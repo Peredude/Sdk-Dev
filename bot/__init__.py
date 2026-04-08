@@ -18,7 +18,8 @@ async def init_clients():
     Initialize MegaSDK async client inside the event loop.
     """
     global mega_client
-    session = ClientSession()  # create session inside the running loop
+    # Create the session inside the running loop
+    session = ClientSession()
     mega_client = AsyncMegaSdkRestClient("http://localhost:6090", session=session)
     LOGGER.info("MegaSDK async client initialized.")
 
