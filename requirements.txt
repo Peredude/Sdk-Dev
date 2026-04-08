@@ -22,7 +22,6 @@ jinja2
 lxml
 motor
 megasdkrestclient
-mega.py
 natsort
 par2cmdline-turbo
 pillow
