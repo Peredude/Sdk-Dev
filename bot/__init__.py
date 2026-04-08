@@ -2,38 +2,27 @@
 
 import logging
 
-# Existing imports for your bot...
-# from .core.tg_client import TgClient
-# from .core.config_manager import Config
-# etc.
-
-# MegaSDK async client
-from megasdkrestclient import AsyncMegaSdkRestClient
+LOGGER = logging.getLogger(__name__)
 
 # Global Mega client reference
 mega_client = None
 
-# Initialize logging (if not already done elsewhere)
-LOGGER = logging.getLogger(__name__)
-
-
 async def init_clients():
     """
-    Initialize external clients (MegaSDK, etc.).
-    Call this once during bot startup inside an async context.
+    Initialize MegaSDK async client inside the event loop.
     """
     global mega_client
-    try:
-        mega_client = AsyncMegaSdkRestClient("http://localhost:6090")
-        LOGGER.info("MegaSDK async client initialized.")
-    except Exception as e:
-        LOGGER.error(f"Failed to initialize MegaSDK client: {e}")
+    from aiohttp import ClientSession
+    from megasdkrestclient import AsyncMegaSdkRestClient
 
+    # Create the session inside the running loop
+    session = ClientSession()
+    mega_client = AsyncMegaSdkRestClient("http://localhost:6090", session=session)
+    LOGGER.info("MegaSDK async client initialized.")
 
 async def close_clients():
     """
-    Cleanly close external clients on shutdown.
-    Prevents unclosed aiohttp sessions/connectors.
+    Cleanly close MegaSDK client on shutdown.
     """
     global mega_client
     if mega_client:
